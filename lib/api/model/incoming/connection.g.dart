@@ -11,6 +11,7 @@ Connection _$ConnectionFromJson(Map<String, dynamic> json) => Connection(
       to: Stop.fromJson(json['to'] as Map<String, dynamic>),
       startingTime: Time.fromJson(json['startingTime'] as Map<String, dynamic>),
       endingTime: Time.fromJson(json['endingTime'] as Map<String, dynamic>),
+      line: Line.fromJson(json['line'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ConnectionToJson(Connection instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$ConnectionToJson(Connection instance) =>
       'to': instance.to,
       'startingTime': instance.startingTime,
       'endingTime': instance.endingTime,
+      'line': instance.line,
     };

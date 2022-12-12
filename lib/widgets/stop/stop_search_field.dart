@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:tramfinder_app/common/utils.dart';
 
-import '../api/model/stop.dart';
+import '../../api/model/incoming/stop.dart';
 
 class _StopSearchFieldState extends State<StopSearchField> {
   @override
