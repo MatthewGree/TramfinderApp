@@ -3,12 +3,12 @@ import 'connection.dart';
 import 'duration.dart';
 part 'route.g.dart';
 @JsonSerializable()
-class Route {
+class ConnectionRoute {
   final List<Connection> connections;
   final Duration duration;
 
-  const Route({required this.connections, required this.duration});
+  const ConnectionRoute({required this.connections, required this.duration});
 
-  factory Route.fromJson(Map<String, dynamic> json) => _$RouteFromJson(json);
+  factory ConnectionRoute.fromJson(Map<String, dynamic> json) => _$RouteFromJson(json);
   Map<String, dynamic> toJson() => _$RouteToJson(this);
 }

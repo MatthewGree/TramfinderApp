@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tramfinder_app/api/model/incoming/stop.dart';
 import 'package:tramfinder_app/common/utils.dart';
+
+import 'route_finder/route_finder.dart';
 import 'stop/stop_searcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,38 +27,30 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              StopSearcher(
-                stops: widget.stops,
-                startStopOnPick: (stop) => setState(() {
-                  startStop = stop;
-                }),
-                targetStopOnPick: (stop) => setState(() {
-                  targetStop = stop;
-                }),
+            Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: responsiveFromHeight(context, 0.01)),
+                child: StopSearcher(
+                  stops: widget.stops,
+                  startStopOnPick: (stop) => setState(() {
+                    startStop = stop;
+                  }),
+                  targetStopOnPick: (stop) => setState(() {
+                    targetStop = stop;
+                  }),
+                ),
               )
             ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: responsivePaddingH(context, 0.01)),
-                  child: ElevatedButton(
-                      onPressed: () => {},
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: responsivePaddingH(context, 0.02),
-                            horizontal: responsivePaddingW(context, 0.02)),
-                        child: const Text(
-                          "Find route",
-                          style: TextStyle(fontSize: 23),
-                        ),
-                      )),
-                )
-              ],
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: RouteFinder(startStop: startStop, targetStop: targetStop))
+                ],
+              ),
             )
           ]),
     );

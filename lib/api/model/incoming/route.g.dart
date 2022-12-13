@@ -6,14 +6,14 @@ part of 'route.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Route _$RouteFromJson(Map<String, dynamic> json) => Route(
+ConnectionRoute _$RouteFromJson(Map<String, dynamic> json) => ConnectionRoute(
       connections: (json['connections'] as List<dynamic>)
           .map((e) => Connection.fromJson(e as Map<String, dynamic>))
           .toList(),
       duration: Duration.fromJson(json['duration'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$RouteToJson(Route instance) => <String, dynamic>{
+Map<String, dynamic> _$RouteToJson(ConnectionRoute instance) => <String, dynamic>{
       'connections': instance.connections,
       'duration': instance.duration,
     };

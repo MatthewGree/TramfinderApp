@@ -1,21 +1,33 @@
 import 'dart:convert';
 
+import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
-import 'package:tramfinder_app/api/model/outgoing/route_request.dart';
 
 import 'model/incoming/route.dart';
 import 'model/incoming/stop.dart';
 import 'model/outgoing/instant.dart';
 
 class ApiInterface {
-  final String _rootUri = "https://83-229-84-64.cloud-xip.com:80";
-  late Uri _nodesUri;
-  late Uri _routeUri;
   final client = http.Client();
+  final String _rootUri = "83-229-84-64.cloud-xip.com:80";
+  late Uri _nodesUri;
 
-  ApiInterface() {
-    _nodesUri = Uri.parse("$_rootUri/stops");
-    _routeUri = Uri.parse("$_rootUri/route");
+  ApiInterface._construct() {
+    _nodesUri = Uri.https(_rootUri, "/stops");
+  }
+
+  static final ApiInterface instance = ApiInterface._construct();
+
+  factory ApiInterface() {
+    return instance;
+  }
+
+  Uri _routeUri(int fromId, int toId, Instant instant) {
+    return Uri.https(_rootUri, "/route", {
+      "start": fromId.toString(),
+      "target": toId.toString(),
+      "time": instant.toString()
+    });
   }
 
   Future<List<Stop>> fetchStops() async {
@@ -24,22 +36,23 @@ class ApiInterface {
     return body.map((jsonStop) => Stop.fromJson(jsonStop)).toList();
   }
 
-  Future<Route> fetchRoute(int fromId, int toId, DateTime dateTime) async {
-    final requestBody = RouteRequest.fromInstant(
-        Instant(
-            year: dateTime.year,
-            month: dateTime.month,
-            day: dateTime.day,
-            hour: dateTime.hour,
-            minute: dateTime.minute),
-        from: fromId,
-        to: toId);
+  Future<Either<String, ConnectionRoute>> fetchRoute(
+      int fromId, int toId, DateTime dateTime) async {
+    final instant = Instant(
+        year: dateTime.year,
+        month: dateTime.month,
+        day: dateTime.day,
+        hour: dateTime.hour,
+        minute: dateTime.minute);
 
-    final request = http.Request("GET", _routeUri);
-    request.body = jsonEncode(requestBody);
-
-    final responseStream = await client.send(request);
-    final response = await http.Response.fromStream(responseStream);
-    return Route.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    final uri = _routeUri(fromId, toId, instant);
+    final response = await client.get(uri);
+    if (response.statusCode == 200) {
+      return Right(ConnectionRoute.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes))));
+    } else if (response.statusCode == 404) {
+      return Left(response.body);
+    }
+    return Left("Undefined error: ${response.toString()}");
   }
 }

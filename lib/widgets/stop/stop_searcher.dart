@@ -18,7 +18,7 @@ class StopSearcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         Row(
           children: [
             StopSearchField(

@@ -9,12 +9,12 @@ class _StopSearchFieldState extends State<StopSearchField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: responsivePaddingW(context, 0.01),
-          top: responsivePaddingH(context, 0.01)
+          left: responsiveFromWidth(context, 0.01),
+          top: responsiveFromHeight(context, 0.01)
       ),
       child: Container(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.7,
+          maxWidth: responsiveFromWidth(context, 0.7, min: 100),
           minWidth: 50
         ),
         child: _searchField(Theme.of(context)),
@@ -29,9 +29,10 @@ class _StopSearchFieldState extends State<StopSearchField> {
           .toList(),
       suggestionState: Suggestion.expand,
       textInputAction: TextInputAction.next,
+      suggestionAction: SuggestionAction.unfocus,
       hint: widget.hint,
       hasOverlay: true,
-      maxSuggestionsInViewPort: 3,
+      maxSuggestionsInViewPort: 5,
       searchInputDecoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: theme.focusColor)),
