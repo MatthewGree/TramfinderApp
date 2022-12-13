@@ -37,13 +37,7 @@ class ApiInterface {
   }
 
   Future<Either<String, ConnectionRoute>> fetchRoute(
-      int fromId, int toId, DateTime dateTime) async {
-    final instant = Instant(
-        year: dateTime.year,
-        month: dateTime.month,
-        day: dateTime.day,
-        hour: dateTime.hour,
-        minute: dateTime.minute);
+      int fromId, int toId, Instant instant) async {
 
     final uri = _routeUri(fromId, toId, instant);
     final response = await client.get(uri);

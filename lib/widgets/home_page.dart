@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                       constraints: BoxConstraints(
                         maxWidth: responsiveFromWidth(context, 0.5,
-                            min: 300, max: 600),
+                            min: 400.0, max: 600.0),
                       ),
                       child: RouteFinder(
                           startStop: startStop, targetStop: targetStop))

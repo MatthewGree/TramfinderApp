@@ -1,13 +1,18 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tramfinder_app/api/api_interface.dart';
 import 'package:tramfinder_app/api/model/incoming/route.dart';
 import 'package:tramfinder_app/api/model/incoming/stop.dart';
+import 'package:tramfinder_app/api/model/incoming/time.dart';
+import 'package:tramfinder_app/api/model/outgoing/instant.dart';
 import 'package:tramfinder_app/common/utils.dart';
 import 'package:tramfinder_app/widgets/route_finder/connection_list_tile.dart';
 
 class _RouteFinderState extends State<RouteFinder> {
   Future<Either<String, ConnectionRoute>>? foundRoute;
+  DateTime _date = DateTime.now();
+  TimeOfDay _time = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +54,14 @@ class _RouteFinderState extends State<RouteFinder> {
     if (widget.targetStop != null && widget.startStop != null) {
       setState(() {
         foundRoute = ApiInterface.instance.fetchRoute(
-            widget.startStop!.id, widget.targetStop!.id, DateTime.now());
+            widget.startStop!.id,
+            widget.targetStop!.id,
+            Instant(
+                year: _date.year,
+                month: _date.month,
+                day: _date.day,
+                hour: _time.hour,
+                minute: _time.minute));
       });
     }
   }
@@ -58,19 +70,60 @@ class _RouteFinderState extends State<RouteFinder> {
     return Padding(
       padding:
           EdgeInsets.symmetric(vertical: responsiveFromHeight(context, 0.01)),
-      child: ElevatedButton(
+      child: Column(children: [
+        Row(
+          children: [
+            _mainButton(
+                text: DateFormat("yyyy-MM-dd").format(_date),
+                onPressed: () => {
+                      showDatePicker(
+                              context: context,
+                              initialDate: _date,
+                              firstDate:
+                                  _date.subtract(const Duration(days: 365)),
+                              lastDate: _date.add(const Duration(days: 365)))
+                          .then((value) {
+                        if (value != null) {
+                          setState(() {
+                            _date = value;
+                          });
+                        }
+                      })
+                    }),
+            _mainButton(
+                text: Time(hour: _time.hour, minutes: _time.minute).toString(),
+                onPressed: () => {
+                      showTimePicker(context: context, initialTime: _time)
+                          .then((value) {
+                        if (value != null) {
+                          setState(() {
+                            _time = value;
+                          });
+                        }
+                      })
+                    })
+          ],
+        ),
+        Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: _mainButton(text: "Find route", onPressed: onPressed)),
+      ]),
+    );
+  }
+
+  Widget _mainButton<T>(
+          {required String text, required void Function()? onPressed}) =>
+      ElevatedButton(
           onPressed: onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(
                 vertical: responsiveFromHeight(context, 0.02),
                 horizontal: responsiveFromWidth(context, 0.02)),
-            child: const Text(
-              "Find route",
-              style: TextStyle(fontSize: 23),
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 23),
             ),
-          )),
-    );
-  }
+          ));
 
   Widget _connectionsList(ConnectionRoute route, ThemeData theme) {
     return Column(
@@ -82,10 +135,7 @@ class _RouteFinderState extends State<RouteFinder> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             [bigText("DURATION"), bigText(route.duration.toString())],
-            [
-              bigText("STOPS"),
-              bigText(route.connections.length.toString())
-            ]
+            [bigText("STOPS"), bigText(route.connections.length.toString())]
           ]
               .map((kids) => Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,9 +147,11 @@ class _RouteFinderState extends State<RouteFinder> {
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: theme.toggleableActiveColor),
                       borderRadius: const BorderRadius.all(Radius.circular(2))),
-                  child: SizedBox(
-                    height: 50,
-                    width: 100,
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      minHeight: 100,
+                      minWidth: 120,
+                    ),
                     child: w,
                   )))
               .toList(),
