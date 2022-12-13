@@ -17,8 +17,8 @@ Future<ThemeData?> _getTheme(String path) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final lightTheme = await _getTheme("custom_theme.json");
-  final darkTheme = await _getTheme("dark_theme.json");
+  final lightTheme = await _getTheme("assets/custom_theme.json");
+  final darkTheme = await _getTheme("assets/dark_theme.json");
 
   runApp(MyApp(
     lightTheme: lightTheme,
