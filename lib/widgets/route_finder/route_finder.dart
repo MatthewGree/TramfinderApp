@@ -17,7 +17,7 @@ class _RouteFinderState extends State<RouteFinder> {
       children: [
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [_findRouteButton(getRoute)]),
+            children: [_findRouteButton(_getRoute)]),
         Expanded(
           child: Row(children: [
             FutureBuilder<Either<String, ConnectionRoute>>(
@@ -45,7 +45,7 @@ class _RouteFinderState extends State<RouteFinder> {
     );
   }
 
-  void getRoute() {
+  void _getRoute() {
     if (widget.targetStop != null && widget.startStop != null) {
       setState(() {
         foundRoute = ApiInterface.instance.fetchRoute(
@@ -77,14 +77,39 @@ class _RouteFinderState extends State<RouteFinder> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          color: theme.highlightColor,
-          child: Text(
-            "Duration of route: ${route.duration.hours}:${route.duration.minutes}, number of stops: ${route.connections.length}",
-            style: const TextStyle(fontSize: 18),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            [bigText("DURATION"), bigText(route.duration.toString())],
+            [
+              bigText("STOPS"),
+              bigText(route.connections.length.toString())
+            ]
+          ]
+              .map((kids) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: kids,
+                  ))
+              .map((w) => Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(color: theme.toggleableActiveColor),
+                      borderRadius: const BorderRadius.all(Radius.circular(2))),
+                  child: SizedBox(
+                    height: 50,
+                    width: 100,
+                    child: w,
+                  )))
+              .toList(),
         ),
-        Divider(),
+        const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Divider(
+              thickness: 15,
+              height: 15,
+            )),
         Expanded(
           child: ListView.separated(
             itemCount: route.connections.length,

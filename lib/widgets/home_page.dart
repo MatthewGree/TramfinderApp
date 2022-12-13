@@ -29,26 +29,36 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: responsiveFromHeight(context, 0.01)),
-                child: StopSearcher(
-                  stops: widget.stops,
-                  startStopOnPick: (stop) => setState(() {
-                    startStop = stop;
-                  }),
-                  targetStopOnPick: (stop) => setState(() {
-                    targetStop = stop;
-                  }),
-                ),
-              )
-            ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: responsiveFromHeight(context, 0.01)),
+                    child: StopSearcher(
+                      stops: widget.stops,
+                      startStopOnPick: (stop) => setState(() {
+                        startStop = stop;
+                      }),
+                      targetStopOnPick: (stop) => setState(() {
+                        targetStop = stop;
+                      }),
+                    ),
+                  )
+                ]),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(child: RouteFinder(startStop: startStop, targetStop: targetStop))
+                  Container(
+                      constraints: BoxConstraints(
+                        maxWidth: responsiveFromWidth(context, 0.5,
+                            min: 300, max: 600),
+                      ),
+                      child: RouteFinder(
+                          startStop: startStop, targetStop: targetStop))
                 ],
               ),
             )

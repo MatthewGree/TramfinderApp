@@ -9,4 +9,7 @@ class Duration {
 
   factory Duration.fromJson(Map<String, dynamic> json) => _$DurationFromJson(json);
   Map<String, dynamic> toJson() => _$DurationToJson(this);
+
+  @override
+  String toString() => "$hours:${minutes.toString().padLeft(2, "0")}";
 }

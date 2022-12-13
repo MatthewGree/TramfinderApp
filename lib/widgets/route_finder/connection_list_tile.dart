@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tramfinder_app/api/model/incoming/connection.dart';
+import 'package:tramfinder_app/common/utils.dart';
 
 class ConnectionListTile extends StatelessWidget {
   final Connection connection;
 
   const ConnectionListTile({super.key, required this.connection});
 
-  Text _BigText(String string) =>
-      Text(string, style: const TextStyle(fontSize: 20));
-
-  Text _MediumText(String string) =>
-      Text(string, style: const TextStyle(fontSize: 18));
-
-  Widget expand(Widget widget) => Expanded(child: widget);
-
   @override
   Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [_lineIdentifier(), _startToTarget(), _times()]
-            .map(expand)
-            .toList());
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 3.0, color: theme.toggleableActiveColor),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          _lineIdentifier(),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [_startToTarget(), _times()]),
+        ]),
+      ),
+    );
   }
 
   Widget _lineIdentifier() {
@@ -32,29 +36,30 @@ class ConnectionListTile extends StatelessWidget {
       }
     } catch (_) {}
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(busOrTram),
         Padding(
             padding: const EdgeInsets.only(right: 10.0),
-            child: _BigText(connection.line.lineId.padRight(3, "  ")))
+            child: bigText(connection.line.lineId.padRight(3, "  ")))
       ],
     );
   }
 
-  Column _startToTarget() {
+  Widget _startToTarget() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _MediumText(connection.from.name),
-          _MediumText(connection.to.name)
-        ].map((w) => Center(child: w)).toList());
+        children: [connection.from.name, connection.to.name]
+            .map((text) => mediumText(text, textAlign: TextAlign.center))
+            .map((text) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15), child: text))
+            .toList());
   }
 
   Column _times() {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      _MediumText(connection.startingTime.toString()),
-      _MediumText(connection.endingTime.toString())
+      mediumText(connection.startingTime.toString()),
+      mediumText(connection.endingTime.toString())
     ]);
   }
 }
