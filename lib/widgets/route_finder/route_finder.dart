@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:tramfinder_app/api/api_interface.dart';
-import 'package:tramfinder_app/api/model/incoming/route.dart';
+import 'package:tramfinder_app/api/model/incoming/connection_route.dart';
 import 'package:tramfinder_app/api/model/incoming/stop.dart';
 import 'package:tramfinder_app/api/model/outgoing/instant.dart';
 import 'package:tramfinder_app/common/utils.dart';

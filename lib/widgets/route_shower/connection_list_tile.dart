@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tramfinder_app/api/model/incoming/connection.dart';
+import 'package:tramfinder_app/api/model/incoming/stop.dart';
+import 'package:tramfinder_app/api/model/incoming/time.dart';
 import 'package:tramfinder_app/common/utils.dart';
 
 class ConnectionListTile extends StatelessWidget {
@@ -16,14 +18,20 @@ class ConnectionListTile extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(12))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         _lineIdentifier(),
-        Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [_startToTarget(), _times()]),
+        _wideRow(connection.from, connection.startingTime),
+        _wideRow(connection.to, connection.endingTime)
       ]),
     );
   }
+
+  Row _wideRow(Stop stop, Time arriveTime) {
+    return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Flexible(fit: FlexFit.tight, child: _createStopField(stop.name)), _createTimeField(arriveTime)]);
+  }
+
+  Widget _createTimeField(Time arriveTime) => Padding(padding: const EdgeInsets.only(right: 15), child: mediumText(arriveTime.toString()));
 
   Widget _lineIdentifier() {
     late IconData busOrTram = Icons.directions_bus_filled;
@@ -44,20 +52,11 @@ class ConnectionListTile extends StatelessWidget {
     );
   }
 
-  Widget _startToTarget() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [connection.from.name, connection.to.name]
-            .map((text) => mediumText(text, textAlign: TextAlign.center))
-            .map((text) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15), child: text))
-            .toList());
-  }
 
-  Column _times() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      mediumText(connection.startingTime.toString()),
-      mediumText(connection.endingTime.toString())
-    ]);
-  }
+  Widget _createStopField(String stopName) =>
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: mediumText(stopName, textAlign: TextAlign.center),
+    );
+
 }

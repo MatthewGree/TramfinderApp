@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
 
-import 'model/incoming/route.dart';
+import 'model/incoming/connection_route.dart';
 import 'model/incoming/stop.dart';
 import 'model/outgoing/instant.dart';
 

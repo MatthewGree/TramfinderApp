@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tramfinder_app/api/model/incoming/route.dart';
+import 'package:tramfinder_app/api/model/incoming/connection_route.dart';
 import 'package:tramfinder_app/common/utils.dart';
 
 import 'connection_list_tile.dart';
 
-class ConnectionShow extends StatelessWidget {
-  const ConnectionShow({
+class ConnectionRouteShower extends StatelessWidget {
+  const ConnectionRouteShower({
     Key? key,
     required this.route,
   }) : super(key: key);
@@ -47,7 +47,7 @@ class ConnectionShow extends StatelessWidget {
         ),
         const Divider(),
         Container(
-          constraints: BoxConstraints(maxWidth: responsiveFromWidth(context, 0.5, min: 325), minWidth: 325),
+          constraints: BoxConstraints(maxWidth: responsiveFromWidth(context, 0.5)),
           child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

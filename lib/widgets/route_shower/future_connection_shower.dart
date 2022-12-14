@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
-import 'package:tramfinder_app/api/model/incoming/route.dart';
-import 'package:tramfinder_app/widgets/route_shower/connection_shower.dart';
+import 'package:tramfinder_app/api/model/incoming/connection_route.dart';
+import 'package:tramfinder_app/widgets/route_shower/connection_route_shower.dart';
 
 class FutureConnectionShower extends StatelessWidget {
   const FutureConnectionShower({
@@ -18,12 +18,12 @@ class FutureConnectionShower extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.requireData.isRight) {
-            return ConnectionShow(route: snapshot.requireData.right);
+            return ConnectionRouteShower(route: snapshot.requireData.right);
           } else {
-            _showAlertDialog(context, snapshot.requireData.left);
+            return alertDialog(context, snapshot.requireData.left);
           }
         } else if (snapshot.hasError) {
-           _showAlertDialog(context, "${snapshot.error}");
+           return alertDialog(context, "${snapshot.error}");
         }
         return Visibility(
             visible: foundRoute != null,
@@ -32,9 +32,8 @@ class FutureConnectionShower extends StatelessWidget {
     );
   }
 
-  void _showAlertDialog(BuildContext context, String message) => showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+  AlertDialog alertDialog(BuildContext context, String message) => AlertDialog(
     title: Text(message),
     content: const Text("Error"),
-    actions: [TextButton(onPressed: () {}, child: const Text("OK"))],
-  ));
+  );
 }
