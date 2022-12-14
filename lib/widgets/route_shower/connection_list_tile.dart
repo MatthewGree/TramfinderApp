@@ -11,19 +11,17 @@ class ConnectionListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Container(
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(width: 3.0, color: theme.toggleableActiveColor),
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          _lineIdentifier(),
-          Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [_startToTarget(), _times()]),
-        ]),
-      ),
+      decoration: BoxDecoration(
+          border: Border.all(width: 3.0, color: theme.toggleableActiveColor),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        _lineIdentifier(),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [_startToTarget(), _times()]),
+      ]),
     );
   }
 

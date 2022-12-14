@@ -8,8 +8,7 @@ import 'model/incoming/stop.dart';
 import 'model/outgoing/instant.dart';
 
 class ApiInterface {
-  final client = http.Client();
-  final String _rootUri = "83-229-84-64.cloud-xip.com:80";
+
   late Uri _nodesUri;
 
   ApiInterface._construct() {
@@ -30,6 +29,9 @@ class ApiInterface {
     });
   }
 
+
+  final client = http.Client();
+  final String _rootUri = "83-229-84-64.cloud-xip.com:80";
   Future<List<Stop>> fetchStops() async {
     final response = await client.get(_nodesUri);
     List body = jsonDecode(utf8.decode(response.bodyBytes));

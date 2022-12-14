@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Instant {
@@ -13,6 +14,12 @@ class Instant {
       required this.day,
       required this.hour,
       required this.minute});
+
+  factory Instant.fromDateTime(DateTime date, {TimeOfDay? time}) =>
+      Instant(year: date.year, month: date.month, day: date.day, hour: time?.hour ?? date.hour, minute: time?.minute ?? date.minute);
+
+  DateTime getDate() => DateTime(year, month, day, hour, minute);
+  TimeOfDay getTime() => TimeOfDay(hour: hour, minute: minute);
 
   @override
   String toString() {
